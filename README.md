@@ -1,6 +1,6 @@
 # Chess Move Visualizer
 
-A Python application that visualizes chess moves using pygame and python-chess. Supports both standard 8x8 chess and custom board sizes.
+A Python application that visualizes chess moves using pygame and python-chess.
 
 ## Setup
 
