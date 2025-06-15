@@ -1,9 +1,11 @@
 from enum import Enum
-from typing import List, Tuple, Set
+from typing import Tuple, Set
+
 
 class PieceColor(Enum):
     WHITE = 'White'
     BLACK = 'Black'
+
 
 class PieceType(Enum):
     PAWN = 'Pawn'
@@ -20,18 +22,20 @@ class PieceType(Enum):
     DRAGON = 'Dragon'
     HORSE = 'Horse'
 
+
 class PieceKey:
     def __init__(self, color, piece_type):
         self.color = color  # 'White' or 'Black'
-        self.piece_type = piece_type  # 'Pawn', 'Knight', 'Bishop', 'Rook', 'Queen', 'King', 'Gold', 'Silver', 'Shogi_Knight', 'Lance', 'Shogi_Pawn', 'Dragon', 'Horse'
-    
+        self.piece_type = piece_type  # 'Pawn', 'Knight', etc
+
     @classmethod
     def from_string(cls, key_str):
         key_str = key_str.split('_', 1)
         return cls(key_str[0], key_str[1])
-    
+
     def __str__(self):
         return f"{self.color}{self.piece_type}"
+
 
 class Piece:
     def __init__(self, piece_type: str, color: str):
@@ -77,7 +81,7 @@ class Piece:
     def _get_pawn_moves(self, pos, board_size):
         moves = []
         row, col = pos
-        
+
         # White pawns start at row board_size-2 and move up (decreasing row)
         # Black pawns start at row 1 and move down (increasing row)
         if self.color == 'White':
@@ -108,14 +112,14 @@ class Piece:
                     moves.append((row + 1, col - 1))
                 if col < board_size - 1:  # Can capture right
                     moves.append((row + 1, col + 1))
-        
+
         return moves
 
     def _get_knight_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
         """Get all legal moves for a knight from the given position."""
         moves = set()
         row, col = pos
-        
+
         # All possible knight moves (8 directions)
         possible_moves = [
             (row - 2, col - 1),  # Up-left
@@ -127,49 +131,49 @@ class Piece:
             (row + 1, col - 2),  # Left-down
             (row + 1, col + 2)   # Right-down
         ]
-        
+
         # Add only valid moves
         for move in possible_moves:
             if self._is_valid_position(move, board_size):
                 moves.add(move)
-        
+
         return moves
 
     def _get_bishop_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
         """Get all legal moves for a bishop from the given position."""
         moves = set()
         row, col = pos
-        
+
         # Bishops move diagonally
         directions = [
             (-1, -1), (-1, 1),  # Up
             (1, -1), (1, 1)     # Down
         ]
-        
+
         for row_dir, col_dir in directions:
             current_row, current_col = row + row_dir, col + col_dir
             while self._is_valid_position((current_row, current_col), board_size):
                 moves.add((current_row, current_col))
                 current_row += row_dir
                 current_col += col_dir
-        
+
         return moves
 
     def _get_rook_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
         """Get all legal moves for a rook from the given position."""
         moves = set()
         row, col = pos
-        
+
         # All possible rook directions
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        
+
         for row_dir, col_dir in directions:
             current_row, current_col = row + row_dir, col + col_dir
             while self._is_valid_position((current_row, current_col), board_size):
                 moves.add((current_row, current_col))
                 current_row += row_dir
                 current_col += col_dir
-        
+
         return moves
 
     def _get_queen_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
@@ -181,41 +185,41 @@ class Piece:
         """Get all legal moves for a king from the given position."""
         moves = set()
         row, col = pos
-        
+
         # All possible king moves
         king_moves = [
             (-1, -1), (-1, 0), (-1, 1),
             (0, -1),           (0, 1),
             (1, -1),  (1, 0),  (1, 1)
         ]
-        
+
         for row_offset, col_offset in king_moves:
             new_row, new_col = row + row_offset, col + col_offset
             if self._is_valid_position((new_row, new_col), board_size):
                 moves.add((new_row, new_col))
-        
+
         return moves
 
     def _get_lance_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
         """Get all legal moves for a lance from the given position."""
         moves = set()
         row, col = pos
-        
+
         # Lance can only move forward (up for White, down for Black)
         direction = -1 if self.color == 'White' else 1
         current_row = row + direction
-        
+
         while self._is_valid_position((current_row, col), board_size):
             moves.add((current_row, col))
             current_row += direction
-        
+
         return moves
 
     def _get_shogi_knight_moves(self, pos: Tuple[int, int], board_size: int) -> Set[Tuple[int, int]]:
         """Get all legal moves for a Shogi knight from the given position."""
         moves = set()
         row, col = pos
-        
+
         # Shogi knight moves in an L-shape but only forward
         if self.color == 'White':
             # White knight moves up and to the sides
@@ -229,7 +233,7 @@ class Piece:
                 (row + 2, col - 1),
                 (row + 2, col + 1)
             }
-        
+
         # Filter out invalid positions
         return {move for move in moves if self._is_valid_position(move, board_size)}
 
@@ -237,7 +241,7 @@ class Piece:
         """Get all legal moves for a silver general from the given position."""
         moves = set()
         row, col = pos
-        
+
         # Silver general moves diagonally and one square forward
         if self.color == 'White':
             # White silver moves
@@ -257,7 +261,7 @@ class Piece:
                 (row - 1, col - 1),  # Backward left
                 (row - 1, col + 1)   # Backward right
             }
-        
+
         # Filter out invalid positions
         return {move for move in moves if self._is_valid_position(move, board_size)}
 
@@ -265,7 +269,7 @@ class Piece:
         """Get all legal moves for a gold general from the given position."""
         moves = set()
         row, col = pos
-        
+
         # Gold general moves like a king but cannot move diagonally backward
         if self.color == 'White':
             # White gold moves
@@ -287,14 +291,16 @@ class Piece:
                 (row, col + 1),      # Right
                 (row - 1, col)       # Backward
             }
-        
+
         # Filter out invalid positions
         return {move for move in moves if self._is_valid_position(move, board_size)}
+
 
 # Factory function to create pieces
 def create_piece(piece_type: str, color: str) -> Piece:
     """Create a new piece of the given type and color."""
     return Piece(piece_type, color)
+
 
 # Dictionary of all available pieces
 AVAILABLE_PIECES = {
@@ -324,4 +330,4 @@ AVAILABLE_PIECES = {
     'Black_Shogi_Pawn':     (PieceType.SHOGI_PAWN, PieceColor.BLACK),
     'Black_Dragon':         (PieceType.DRAGON, PieceColor.BLACK),
     'Black_Horse':          (PieceType.HORSE, PieceColor.BLACK),
-}   
+}
