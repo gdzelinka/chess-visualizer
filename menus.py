@@ -45,6 +45,12 @@ class SettingsBar:
                                               True,
                                               TEXT_COLOR)
 
+        # Save/Load buttons
+        self.save_btn = pygame.Rect(240, button_y, button_width, button_height)
+        self.save_text = self.font.render("Save Pos", True, TEXT_COLOR)
+        self.load_btn = pygame.Rect(350, button_y, button_width, button_height)
+        self.load_text = self.font.render("Load Pos", True, TEXT_COLOR)
+
         # Turn toggle button
         self.turn_btn = pygame.Rect(self.width - button_width - 10,
                                     button_y,
@@ -77,6 +83,8 @@ class SettingsBar:
         # Draw buttons
         pygame.draw.rect(screen, BUTTON_COLOR, self.decrease_btn)
         pygame.draw.rect(screen, BUTTON_COLOR, self.increase_btn)
+        pygame.draw.rect(screen, BUTTON_COLOR, self.save_btn)
+        pygame.draw.rect(screen, BUTTON_COLOR, self.load_btn)
         pygame.draw.rect(screen, BUTTON_COLOR, self.turn_btn)
         pygame.draw.rect(screen, BUTTON_COLOR, self.preset_btn)
 
@@ -87,6 +95,12 @@ class SettingsBar:
         screen.blit(self.increase_text,
                     (self.increase_btn.centerx - self.increase_text.get_width()//2,
                      self.increase_btn.centery - self.increase_text.get_height()//2))
+        screen.blit(self.save_text,
+                    (self.save_btn.centerx - self.save_text.get_width()//2,
+                     self.save_btn.centery - self.save_text.get_height()//2))
+        screen.blit(self.load_text,
+                    (self.load_btn.centerx - self.load_text.get_width()//2,
+                     self.load_btn.centery - self.load_text.get_height()//2))
         screen.blit(self.turn_text,
                     (self.turn_btn.centerx - self.turn_text.get_width()//2,
                      self.turn_btn.centery - self.turn_text.get_height()//2))
@@ -102,6 +116,10 @@ class SettingsBar:
             return "decrease"
         elif self.increase_btn.collidepoint(pos):
             return "increase"
+        elif self.save_btn.collidepoint(pos):
+            return "save_position"
+        elif self.load_btn.collidepoint(pos):
+            return "load_position"
         elif self.turn_btn.collidepoint(pos):
             return "toggle_turn"
         elif self.preset_btn.collidepoint(pos):
@@ -362,3 +380,27 @@ class PresetMenu:
             if button_rect.collidepoint(pos):
                 return preset_name
         return None
+
+
+def save_board_state(board_state, filename="board_position.txt"):
+    """
+    board_state: list of ((row, col), piece_name) tuples
+    """
+    with open(filename, "w") as f:
+        for (row, col), piece_name in board_state:
+            f.write(f"{row},{col},{piece_name}\n")
+
+def load_board_state(filename="board_position.txt"):
+    """
+    Returns: list of ((row, col), piece_name) tuples
+    """
+    board_state = []
+    try:
+        with open(filename, "r") as f:
+            for line in f:
+                row, col, piece_name = line.strip().split(",", 2)
+                board_state.append(((int(row), int(col)), piece_name))
+    except FileNotFoundError:
+        # If the file does not exist, just return an empty list
+        return []
+    return board_state

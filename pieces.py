@@ -16,8 +16,12 @@ class MovementPattern:
         moves = []
         row, col = pos
         for row_dir, col_dir in patterns:
-            dr = row_dir * direction
-            dc = col_dir
+            if row_dir != 0:
+                dr = row_dir * direction
+                dc = col_dir * direction
+            else:
+                dr = row_dir
+                dc = col_dir
             current_row, current_col = row + dr, col + dc
             steps = 0
             while (max_steps is None or steps < max_steps) and MovementPattern._is_valid_position((current_row, current_col), board_size):
@@ -331,7 +335,7 @@ class Piece:
         self.color = color
         self.rank = rank  # Numerical rank (1-10, 1=lowest, 10=highest)
         self.symbol = color + '_' + piece_type  # Keep image filename without rank
-        self.direction = -1 if color == 'White' else 1
+        self.direction = 1 if color == 'White' else -1
 
     def get_legal_moves_with_info(self, pos: Tuple[int, int], board_size: int) -> List[Tuple[Tuple[int, int], bool]]:
         """Get all legal moves for this piece from the given position with jump information.
@@ -341,12 +345,7 @@ class Piece:
             # Standard chess pieces
             'Pawn': lambda p, b: [(move, False) for move in self._get_pawn_moves(p, b)],
             'Knight': lambda p, b: [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction, max_steps=1)],
-            'Bishop': lambda p, b: (    
-                [(move, ('origin', 1)) for move in MovementPattern.get_moves(p, [(-3, -3)], b, self.direction, max_steps=1)] +
-                [(move, ('origin', 2)) for move in MovementPattern.get_moves(p, [(-3, 3)], b, self.direction, max_steps=1)] +
-                [(move, ('direction', 1)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, ('direction', 2)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL'], b, self.direction)]
-            ),
+            'Bishop': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)],
             'Rook': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Queen': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)],
             'King': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)],
@@ -574,7 +573,7 @@ class Piece:
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_MASTER'], b, self.direction,  max_steps=1)]
             ),
             'Wood_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)],
-            'Golden_Bird': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)], #Golden Bird requires fixing jumping
+            'Golden_Bird': lambda p, b: [(move, True) for move in self._get_golden_bird_moves(p, b)],
             'Great_Dove': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=3)]
@@ -1115,6 +1114,31 @@ class Piece:
                 if col < board_size - 1:  # Can capture right
                     moves.append((row + 1, col + 1))
 
+        return moves
+
+    def _get_golden_bird_moves(self, pos, board_size):
+        """
+        Golden Bird: Jump over up to 3 pieces diagonally forward (left or right),
+        landing on the 1st, 2nd, or 3rd square, then continue sliding any number of empty spaces in that direction.
+        """
+        moves = []
+        row, col = pos
+        # Diagonal forward directions
+        directions = [(-1, -1), (-1, 1)] if self.color == 'White' else [(1, -1), (1, 1)]
+        for dr, dc in directions:
+            for jump in range(1, 4):
+                jump_row = row + dr * jump
+                jump_col = col + dc * jump
+                if not self._is_valid_position((jump_row, jump_col), board_size):
+                    break
+                # Add the jump landing square
+                moves.append((jump_row, jump_col))
+                # Now slide from the landing square
+                slide_row, slide_col = jump_row + dr, jump_col + dc
+                while self._is_valid_position((slide_row, slide_col), board_size):
+                    moves.append((slide_row, slide_col))
+                    slide_row += dr
+                    slide_col += dc
         return moves
 
 

@@ -85,9 +85,9 @@ SHOGI_STANDARD = {
     'pieces': {
         # White pieces
         (8, 0): 'White_Lance', (8, 1): 'White_Shogi_Knight',
-        (8, 2): 'White_Silver', (8, 3): 'White_Gold',
-        (8, 4): 'White_King', (8, 5): 'White_Gold',
-        (8, 6): 'White_Silver', (8, 7): 'White_Shogi_Knight',
+        (8, 2): 'White_Silver_General', (8, 3): 'White_Gold_General',
+        (8, 4): 'White_King', (8, 5): 'White_Gold_General',
+        (8, 6): 'White_Silver_General', (8, 7): 'White_Shogi_Knight',
         (8, 8): 'White_Lance',
         (7, 1): 'White_Bishop', (7, 7): 'White_Rook',
         (6, 0): 'White_Shogi_Pawn', (6, 1): 'White_Shogi_Pawn',
@@ -98,9 +98,9 @@ SHOGI_STANDARD = {
 
         # Black pieces
         (0, 0): 'Black_Lance', (0, 1): 'Black_Shogi_Knight',
-        (0, 2): 'Black_Silver', (0, 3): 'Black_Gold',
-        (0, 4): 'Black_King', (0, 5): 'Black_Gold',
-        (0, 6): 'Black_Silver', (0, 7): 'Black_Shogi_Knight',
+        (0, 2): 'Black_Silver_General', (0, 3): 'Black_Gold_General',
+        (0, 4): 'Black_King', (0, 5): 'Black_Gold_General',
+        (0, 6): 'Black_Silver_General', (0, 7): 'Black_Shogi_Knight',
         (0, 8): 'Black_Lance',
         (1, 1): 'Black_Rook', (1, 7): 'Black_Bishop',
         (2, 0): 'Black_Shogi_Pawn', (2, 1): 'Black_Shogi_Pawn',

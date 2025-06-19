@@ -2,7 +2,7 @@ import pygame
 import os
 from pieces import create_piece, AVAILABLE_PIECES, ROYAL_PIECES, HOOK_MOVERS, JUMP_MOVERS
 from presets import get_preset
-from menus import SettingsBar, PiecePanel, PresetMenu, WINDOW_SIZE, PANEL_WIDTH, SETTINGS_BAR_HEIGHT
+from menus import SettingsBar, PiecePanel, PresetMenu, WINDOW_SIZE, PANEL_WIDTH, SETTINGS_BAR_HEIGHT, save_board_state, load_board_state
 
 # Initialize Pygame
 pygame.init()
@@ -490,6 +490,14 @@ class ChessVisualizer:
                             self.en_passant_target = None  # Clear en passant target on turn change
                         elif action == "show_presets":
                             self.preset_menu.visible = True
+                        elif action == "save_position":
+                            # Save the board state as a list of ((row, col), piece_key) tuples
+                            board_state = [((row, col), piece_key) for (row, col), (piece_key, _) in self.board.items()]
+                            save_board_state(board_state)
+                        elif action == "load_position":
+                            # Load the board state and update self.board
+                            loaded_state = load_board_state()
+                            self.board = {(row, col): (piece_key, self._get_piece_rank(piece_key)) for (row, col), piece_key in loaded_state}
                         continue
 
                     # Check if click is in preset menu
