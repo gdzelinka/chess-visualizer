@@ -440,7 +440,7 @@ class Piece:
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'] + MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
             ),
-            'Climbing_Monkey': lambda p, b: MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1),
+            'Climbing_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
             'Center_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=3)]
@@ -573,7 +573,11 @@ class Piece:
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_MASTER'], b, self.direction,  max_steps=1)]
             ),
             'Wood_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)],
-            'Golden_Bird': lambda p, b: [(move, True) for move in self._get_golden_bird_moves(p, b)],
+            'Golden_Bird': lambda p, b: (
+                [(move, ('limited_jumping', 3)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)]
+            ),
             'Great_Dove': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=3)]
@@ -795,54 +799,12 @@ class Piece:
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction,  max_steps=2)]
             ),
             'Roc_Master': lambda p, b: (
-                # For White
-                ([
-                    # Jump to (-3, -3)
-                    ((p[0] - 3, p[1] - 3), True)
-                ] if MovementPattern._is_valid_position((p[0] - 3, p[1] - 3), b, self.direction) else set()
-                ) +
-                ([
-                    # Jump to (-3, 3)
-                    ((p[0] - 3, p[1] + 3), True)
-                ] if MovementPattern._is_valid_position((p[0] - 3, p[1] + 3), b, self.direction) else set()
-                ) +
-                # From each jump destination, continue along the same diagonal
-                set().union(*[[
-                    ((jump_pos[0] + step * d[0], jump_pos[1] + step * d[1]), False)
-                    for step in range(1, b, self.direction)
-                    if MovementPattern._is_valid_position((jump_pos[0] + step * d[0], jump_pos[1] + step * d[1]), b, self.direction)
-                ]
-                for d, jump_pos in [
-                    ((-1, -1), (p[0] - 3, p[1] - 3)),
-                    ((-1, 1), (p[0] - 3, p[1] + 3))
-                ]
-                if MovementPattern._is_valid_position(jump_pos, b, self.direction)
-            ]))
-            if self.color == 'White' else (
-                # For Black
-                ([
-                    # Jump to (3, -3)
-                    ((p[0] + 3, p[1] - 3), True)
-                ] if MovementPattern._is_valid_position((p[0] + 3, p[1] - 3), b, self.direction) else set()
-                ) +
-                ([
-                    # Jump to (3, 3)
-                    ((p[0] + 3, p[1] + 3), True)
-                ] if MovementPattern._is_valid_position((p[0] + 3, p[1] + 3), b, self.direction) else set()
-                ) +
-                set().union(*[[
-                    ((jump_pos[0] + step * d[0], jump_pos[1] + step * d[1]), False)
-                    for step in range(1, b, self.direction)
-                    if MovementPattern._is_valid_position((jump_pos[0] + step * d[0], jump_pos[1] + step * d[1]), b, self.direction)
-                ]
-                for d, jump_pos in [
-                    ((1, -1), (p[0] + 3, p[1] - 3)),
-                    ((1, 1), (p[0] + 3, p[1] + 3))
-                ]
-                if MovementPattern._is_valid_position(jump_pos, b, self.direction)
-            ]) +
-            [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-            [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=6)]
+                [(move, ('origin', 1)) for move in MovementPattern.get_moves(p, [(-3,-3)], b, self.direction, max_steps=1)] +
+                [(move, ('origin', 2)) for move in MovementPattern.get_moves(p, [(-3, 3)], b, self.direction, max_steps=1)] +
+                [(move, ('direction', 1)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction)] +
+                [(move, ('direction', 2)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'] + MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=5)]
             ),
             'Running_Stag': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)] +
@@ -1114,31 +1076,6 @@ class Piece:
                 if col < board_size - 1:  # Can capture right
                     moves.append((row + 1, col + 1))
 
-        return moves
-
-    def _get_golden_bird_moves(self, pos, board_size):
-        """
-        Golden Bird: Jump over up to 3 pieces diagonally forward (left or right),
-        landing on the 1st, 2nd, or 3rd square, then continue sliding any number of empty spaces in that direction.
-        """
-        moves = []
-        row, col = pos
-        # Diagonal forward directions
-        directions = [(-1, -1), (-1, 1)] if self.color == 'White' else [(1, -1), (1, 1)]
-        for dr, dc in directions:
-            for jump in range(1, 4):
-                jump_row = row + dr * jump
-                jump_col = col + dc * jump
-                if not self._is_valid_position((jump_row, jump_col), board_size):
-                    break
-                # Add the jump landing square
-                moves.append((jump_row, jump_col))
-                # Now slide from the landing square
-                slide_row, slide_col = jump_row + dr, jump_col + dc
-                while self._is_valid_position((slide_row, slide_col), board_size):
-                    moves.append((slide_row, slide_col))
-                    slide_row += dr
-                    slide_col += dc
         return moves
 
 
@@ -1582,3 +1519,4 @@ AVAILABLE_PIECES = {
 ROYAL_PIECES = ['Rook_General', 'Bishop_General', 'Violent_Dragon', 'Flying_Crocodile', 'Vice_General', 'Great_General']
 HOOK_MOVERS = ['Hook_Mover', 'Capricorn', 'Long_Nosed_Goblin', 'Peacock']
 JUMP_MOVERS = ['Roc_Master']
+LIMITED_JUMPING_MOVERS = ['Golden_Bird']
