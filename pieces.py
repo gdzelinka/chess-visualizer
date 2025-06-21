@@ -16,12 +16,8 @@ class MovementPattern:
         moves = []
         row, col = pos
         for row_dir, col_dir in patterns:
-            if row_dir != 0:
-                dr = row_dir * direction
-                dc = col_dir * direction
-            else:
-                dr = row_dir
-                dc = col_dir
+            dr = row_dir * direction
+            dc = col_dir * direction
             current_row, current_col = row + dr, col + dc
             steps = 0
             while (max_steps is None or steps < max_steps) and MovementPattern._is_valid_position((current_row, current_col), board_size):
@@ -72,16 +68,21 @@ MOVEMENT_PATTERNS = {
     'HORNED_FALCON': [(-2, 0)],  # Horned Falcon moves
     'RUNNING_HORSE': [(2, -2), (2, 2)],  # Running Horse moves
     'KIRIN': [(0, -2), (0, 2)],  # Kirin moves
+    'DREAM_EATER': [(0, -3), (0, 3)],  # Dream Eater moves
+    'GREAT_FALCON': [(-2, 0), (2, 0)],  # Great Falcon moves
     'LION_DOG': [(-3, -3), (-3, 0), (-3, 3), (0, 3), (3, 3), (3, 0), (3, -3), (0, -3)],  # Lion Dog moves
+    'HEAVENLY_TETRARCH': [(-2, -2), (-2, 0), (-2, 2), (0, 2), (2, 2), (2, 0), (2, -2), (0, -2)],  # Heavenly Tetrarch moves
     'LEFT_MOUNTAIN_EAGLE': [(-2, -2), (2, -2)],  # Left Mountain Eagle moves
     'RIGHT_MOUNTAIN_EAGLE': [(-2, 2), (2, 2)],  # Right Mountain Eagle moves
-    'CENTAUR_MASTER': [(-2, -2), (-2, 0), (-2, 2), (2, 0)],  # Centaur Master moves
+    'CENTER_MASTER': [(-2, -2), (-2, 0), (-2, 2), (2, 0)],  # Center Master moves
     'PHOENIX_MASTER': [(-3, -3), (-3, 3)],  # Phoenix Master moves
     'WOODEN_DOVE': [(-3, -3), (-4, -4), (-5, -5),
                     (-3, 3), (-4, 4), (-5, 5),
                     (3, -3), (4, -4), (5, -5),
                     (3, 3), (4, 4), (5, 5)],  # Wooden Dove moves
     'VICE_GENERAL': [(-2, 0), (2, 0), (-2, 0), (2, 0)],  # Vice General moves
+    'SPIRIT_TURTLE': [(-3, 0), (3, 0), (-3, 0), (3, 0)],  # Spirit Turtle moves
+    'HEAVENLY_HORSE': [(-2, -1), (-2, 1), (2, -1), (2, 1)],  # Heavenly Horse moves
 }
 
 class PieceColor(Enum):
@@ -215,7 +216,7 @@ class PieceType(Enum):
     LEFT_MOUNTAIN_EAGLE = 'Left_Mountain_Eagle'
     RIGHT_MOUNTAIN_EAGLE = 'Right_Mountain_Eagle'
     MOUNTAIN_STAG = 'Mountain_Stag'
-    CENTAUR_MASTER = 'Centaur_Master'
+    CENTER_MASTER = 'Center_Master'
     NORTHERN_BARBARIAN = 'Northern_Barbarian'
     NEIGHBORING_KING = 'Neighboring_King'
     VIOLENT_WOLF = 'Violent_Wolf'
@@ -309,6 +310,97 @@ class PieceType(Enum):
     WESTERN_BARBARIAN = 'Western_Barbarian'
     WHITE_TIGER = 'White_Tiger'
     YAKSHA = 'Yaksha'
+    RIGHT_ARMY = 'Right_Army'
+    LEFT_ARMY = 'Left_Army'
+    FREE_FIRE = 'Free_Fire'
+    GREAT_WHALE = 'Great_Whale'
+    DIVINE_TIGER = 'Divine_Tiger'
+    DIVINE_TURTLE = 'Divine_Turtle'
+    ELEPHANT_KING = 'Elephant_King'
+    CAPTIVE_BIRD = 'Captive_Bird'
+    THUNDER_RUNNER = 'Thunder_Runner'
+    FREE_LEOPARD = 'Free_Leopard'
+    FREE_SERPENT = 'Free_Serpent'
+    FREE_TIGER = 'Free_Tiger'
+    FREE_BEAR = 'Free_Bear'
+    HEAVENLY_TETRARCH = 'Heavenly_Tetrarch'
+    PLAYFUL_COCKATOO = 'Playful_Cockatoo'
+    RUNNING_DRAGON = 'Running_Dragon'
+    FREE_STAG = 'Free_Stag'
+    FREE_WOLF = 'Free_Wolf'
+    RAIN_DEMON = 'Rain_Demon'
+    FLYING_CROCODILE = 'Flying_Crocodile'
+    BEAST_BIRD = 'Beast_Bird'
+    FREE_DRAGON = 'Free_Dragon'
+    FREE_DOG = 'Free_Dog'
+    GOOSE_WING = 'Goose_Wing'
+    FREE_PIG = 'Free_Pig'
+    FREE_CHICKEN = 'Free_Chicken'
+    FREE_HORSE = 'Free_Horse'
+    FREE_OX = 'Free_Ox'
+    FREE_BOAR = 'Free_Boar'
+    FURIOUS_FIEND = 'Furious_Fiend'
+    FREE_BIRD = 'Free_Bird'
+    RIGHT_PHOENIX = 'Right_Phoenix'
+    WALKING_HERON = 'Walking_Heron'
+    STRONG_EAGLE = 'Strong_Eagle'
+    COPPER_ELEPHANT = 'Copper_Elephant'
+    BURNING_CHARIOT = 'Burning_Chariot'
+    TIGER_SOLDIER = 'Tiger_Soldier'
+    ANCIENT_DRAGON = 'Ancient_Dragon'
+    BUDDHIST_SPIRIT = 'Buddhist_Spirit'
+    TEACHING_KING = 'Teaching_King'
+    WIND_SNAPPING_TURTLE = 'Wind_Snapping_Turtle'
+    GREAT_HORSE = 'Great_Horse'
+    LEFT_DOG = 'Left_Dog'
+    RIGHT_DOG = 'Right_Dog'
+    GREAT_DREAM_EATER = 'Great_Dream_Eater'
+    FLYING_FALCON = 'Flying_Falcon'
+    TREASURE_TURTLE = 'Treasure_Turtle'
+    SPIRIT_TURTLE = 'Spirit_Turtle'
+    RUNNING_TILE = 'Running_Tile'
+    GREAT_BEAR = 'Great_Bear'
+    VENOMOUS_WOLF = 'Venomous_Wolf'
+    HEAVENLY_HORSE = 'Heavenly_Horse'
+    RAIDING_FALCON = 'Raiding_Falcon'
+    MOUNTAIN_WITCH = 'Mountain_Witch'
+    WIZARD_STORK = 'Wizard_Stork'
+    RUSHING_BOAR = 'Rushing_Boar'
+    BEARS_EYES = 'Bears_Eyes'
+    MOUNTIAN_CRANE = 'Mountain_Crane'
+    YOUNG_BIRD = 'Young_Bird'
+    DIVINE_SPARROW = 'Divine_Sparrow'
+    DIVINE_DRAGON = 'Divine_Dragon'
+    CAVALIER = 'Cavalier'
+    GLIDING_SPARROW = 'Gliding_Sparrow'
+    FLYING_STAG = 'Flying_Stag'
+    PLODDING_OX = 'Plooding_Ox'
+    BIRD_OF_PARADISE = 'Bird_of_Paradise'
+    STRONG_CHARIOT = 'Strong_Chariot'
+    COILED_DRAGON = 'Coiled_Dragon'
+    HEAVENLY_TETRARCH_KING = 'Heavenly_Tetrarch_King'
+    VIOLENT_WIND = 'Violent_Wind'
+    CHINESE_RIVER = 'Chinese_River'
+    PEACEFUL_MOUNTAIN = 'Peaceful_Mountain'
+    RUNNING_OX = 'Running_Ox'
+    RUNNING_BOAR = 'Running_Boar'
+    RUNNING_LEOPARD = 'Running_Leopard'
+    STRONG_BEAR = 'Strong_Bear'
+    RIGHT_IRON_CHARIOT = 'Right_Iron_Chariot'
+    LEFT_IRON_CHARIOT = 'Left_Iron_Chariot'
+    FIRE_OX = 'Fire_Ox'
+    LONGBOW_GENERAL = 'Longbow_General'
+    LEOPARD_KING = 'Leopard_King'
+    BURNING_GENERAL = 'Burning_General'
+    SWORD_GENERAL = 'Sword_General'
+    GREAT_FALCON = 'Great_Falcon'
+    GREAT_EAGLE = 'Great_Eagle'
+    SPEAR_GENERAL = 'Spear_General'
+    GREAT_LEOPARD = 'Great_Leopard'
+    GREAT_TIGER = 'Great_Tiger'
+    CROSSBOW_GENERAL = 'Crossbow_General'
+    GREAT_ELEPHANT = 'Great_Elephant'
+    MULTI_GENERAL = 'Multi_General'
 
 class PieceKey:
     def __init__(self, color, piece_type, rank):
@@ -355,224 +447,224 @@ class Piece:
             'Silver_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Shogi_Knight': lambda p, b: [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SHOGI_KNIGHT'], b, self.direction, max_steps=1)],
             'Lance': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)],
-            'Shogi_Pawn': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=1)],
-            'Dragon_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=1)],
-            'Horse_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Shogi_Pawn': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)],
+            'Dragon_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)],
+            'Horse_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)],
             
             # Taikyoku pieces
             'Angry_Boar': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)]
             ),
             'Running_Bear': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)]
             ),
             'Blind_Bear': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'] + MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'] + MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Beast_Cadet': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=2)]
             ),
             'Buddhist_Devil': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)]
             ),
             'Bear_Soldier': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)]
             ),
             'Bishop_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)],
-            'Blind_Dog': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Blind_Dog': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Blue_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'] + MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
-            'Blind_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Blind_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)],
             'Burning_Soldier': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=5)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=7)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=5)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=7)]
             ),
             'Beast_Officer': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Boar_Soldier': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)]
             ),
-            'Blind_Tiger': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Copper_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+            'Blind_Tiger': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)],
+            'Copper_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             'Capricorn': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)] +
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)]
              ),
-            'Chinese_Rooster': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Chinese_Rooster': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Ceramic_Dove': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=2)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)]
             ),
             'Cloud_Eagle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Chicken_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKEARD_DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=4)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKEARD_DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=4)]
             ),
             'Chariot_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Stone_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'Flying_Rooster': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)],
+            'Flying_Rooster': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)],
             'Cloud_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'] + MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
-            'Climbing_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+            'Climbing_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             'Center_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=3)]
             ),
             'Captive_Officer': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=3)]
             ),
-            'Prince': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=1)],
+            'Prince': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)],
             'Copper_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)]
             ),
-            'Cat_Sword': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Captive_Cadet': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=3)],
-            'Dog': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Drunken_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Cat_Sword': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)],
+            'Captive_Cadet': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=3)],
+            'Dog': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)],
+            'Drunken_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)],
             'Roaring_Dog': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'] + MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ROARING_DOG'], b, self.direction)]
                 ),
             'Dragon_Horse': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)]
             ),
             'Dragon_King': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'Donkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=2)],
+            'Donkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=2)],
             'Fire_Demon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
-            'Dark_Spirit': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Deva': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Earth_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
-            'Enchanted_Badger': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=2)],
+            'Dark_Spirit': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=1)],
+            'Deva': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)],
+            'Earth_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
+            'Enchanted_Badger': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=2)],
             'Earth_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Earth_Dragon': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)]
             ), #This piece is different in Japanese
             'Fierce_Eagle': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=1)]
             ),
             'Soaring_Eagle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)]
             ),
             'Eastern_Barbarian': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'Evil_Wolf': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Evil_Wolf': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Fire_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=3)]
             ),
             'Flying_Cat': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_CAT'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_CAT'], b, self.direction, max_steps=1)]
             ),
             'Flying_Dragon': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)]
             ),
             'Free_Eagle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FREE_EAGLE'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FREE_EAGLE'], b, self.direction, max_steps=1)]
             ),
-            'Fragrant_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=2)],
-            'Flying_Horse': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=2)],
+            'Fragrant_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)],
+            'Flying_Horse': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=2)],
             'Fire_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=4)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=4)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)]
             ),
-            'Ferocious_Leopard': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Ferocious_Leopard': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)],
             'Forest_Demon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=3)]
             ),
             'Free_Pup': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'] + MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'] + MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Free_Demon': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+ MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=5)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+ MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=5)]
             ), # Free Demon is different in Japanese
             'Flying_Swallow': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['Backward'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['Backward'], b, self.direction, max_steps=1)]
             ),
             'Free_Dream_Eater': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=5)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=5)]
             ),
-            'Flying_Goose': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
-            'Go_Between': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+            'Flying_Goose': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
+            'Go_Between': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             'Gold_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Great_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=3)]
             ),
             'Great_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)]
             ),
             'Great_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)],
             'Golden_Deer': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)]
             ),
             'Great_Master': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=5)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_MASTER'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=5)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_MASTER'], b, self.direction, max_steps=1)]
             ),
-            'Wood_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)],
+            'Wood_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)],
             'Golden_Bird': lambda p, b: (
                 [(move, ('limited_jumping', 3)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
@@ -580,223 +672,223 @@ class Piece:
             ),
             'Great_Dove': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=3)]
             ),
             'Great_Stag': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_STAG'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_STAG'], b, self.direction, max_steps=1)]
             ),
             'Great_Turtle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_TURTLE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_TURTLE'], b, self.direction, max_steps=1)]
             ),
-            'Guardian_Of_The_Gods': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=3)],
+            'Guardian_Of_The_Gods': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=3)],
             'Horse_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Howling_Dog': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             ),
             'Rams_Head_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             ),
             'Horned_Falcon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HORNED_FALCON'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HORNED_FALCON'], b, self.direction, max_steps=1)]
             ),
             'Hook_Mover': lambda p, b: [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Horseman': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)],
             ),
             'Running_Horse': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RUNNING_HORSE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RUNNING_HORSE'], b, self.direction, max_steps=1)]
             ),
             'Horse_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)],
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             ),
-            'Iron_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Shogi_King': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=2)],
+            'Iron_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)],
+            'Shogi_King': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)],
             'Kirin_Master': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_TURTLE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_TURTLE'], b, self.direction, max_steps=1)]
             ),
             'Kirin': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KIRIN'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KIRIN'], b, self.direction, max_steps=1)]
             ),
             'Longbow_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Left_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction,  max_steps=1)],
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction, max_steps=1)],
             ),
             'Lion_Dog': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LION_DOG'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LION_DOG'], b, self.direction, max_steps=1)]
             ),
             'Left_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'] + MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+ MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction, max_steps=2)]
             ),
-            'Left_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=1)],
+            'Left_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)],
             'Liberated_Horse': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Lion_Hawk': lambda p, b: (
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction,  max_steps=1)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction, max_steps=1)] +
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_DRAGON'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_DRAGON'], b, self.direction, max_steps=1)]
             ),
             'Little_Turtle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KIRIN'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KIRIN'], b, self.direction, max_steps=1)]
             ),
             'Lion': lambda p, b: (
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction, max_steps=1)]
             ),
             'Long_Nosed_Goblin': lambda p, b: [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)],
             'Leopard_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Little_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Left_Tiger': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Mountain_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Mountain_Falcon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HORNED_FALCON'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HORNED_FALCON'], b, self.direction, max_steps=1)]
             ),
             'Side_Monkey': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Left_Mountain_Eagle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_MOUNTAIN_EAGLE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_MOUNTAIN_EAGLE'], b, self.direction, max_steps=1)]
             ),
             'Right_Mountain_Eagle': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_MOUNTAIN_EAGLE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_MOUNTAIN_EAGLE'], b, self.direction, max_steps=1)]
             ),
             'Mountain_Stag': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=4)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=4)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
-            'Centaur_Master': lambda p, b: (
+            'Center_Master': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=3)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['CENTAUR_MASTER'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['CENTER_MASTER'], b, self.direction, max_steps=1)]
             ),
             'Northern_Barbarian': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
-            'Neighboring_King': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=1)],
-            'Violent_Wolf': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)],
+            'Neighboring_King': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=1)],
+            'Violent_Wolf': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)],
             'Ox_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)]
             ),
             'Oxcart': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)],
             'Old_Kite': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
-            'Old_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)],
-            'Old_Rat': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Old_Monkey': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)],
+            'Old_Rat': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)],
             'Ox_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)]
             ),
-            'Swooping_Owl': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Swooping_Owl': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Flying_Ox': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)],
             'Peacock': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps = 2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps = 2)] +
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)]
             ),
             'Pup_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=4)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=4)]
             ),
             'Phoenix': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=1)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_DRAGON'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FLYING_DRAGON'], b, self.direction, max_steps=1)]
             ),
             'Pig_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=4)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=4)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
             'Phoenix_Master': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['PHOENIX_MASTER'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['PHOENIX_MASTER'], b, self.direction, max_steps=1)]
             ),
             'Prancing_Stag': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Poisonous_Snake': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Rain_Dragon': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
             ),
             'Rushing_Bird': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Right_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction, max_steps=1)]
             ),
-            'Reclining_Dragon': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=1)],
+            'Reclining_Dragon': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)],
             'River_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
-            'Right_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=1)],
+            'Right_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)],
             'Running_Chariot': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Right_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'] + MOVEMENT_PATTERNS['LEFT_SIDE']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction, max_steps=2)]
             ),
             'Roc_Master': lambda p, b: (
                 [(move, ('origin', 1)) for move in MovementPattern.get_moves(p, [(-3,-3)], b, self.direction, max_steps=1)] +
@@ -807,226 +899,587 @@ class Piece:
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'] + MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=5)]
             ),
             'Running_Stag': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
             'Rook_General': lambda p, b: [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Running_Pup': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Running_Rabbit': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Rear_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=2)]
             ),
             'Running_Tiger': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Running_Serpent': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Reverse_Chariot': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)],
             'Running_Wolf': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)]
             ),
             'Side_Boar': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Crossbow_Soldier': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=5)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=5)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Front_Standard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)]
             ),
             'Sword_Soldier': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)],
             'Side_Flyer': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'Stone_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Stone_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Side_Dragon': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'] + MOVEMENT_PATTERNS['SIDE'], b, self.direction)],
             'Side_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Side_Mover': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Coiled_Serpent': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)],
             'Soldier': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Spear_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Square_Mover': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)],
             'Silver_Rabbit': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)]
             ),
             'Side_Serpent': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
-            'Strutting_Crow': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)],
+            'Strutting_Crow': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)],
             'Southern_Barbarian': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Silver_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Swallows_Wings': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
             ),
             'Side_Ox': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'Tile_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)],
+            'Tile_General': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)],
             'Tile_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Turtle_Dove': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=5)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=5)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE'], b, self.direction, max_steps=1)]
             ),
             'Treacherous_Fox': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)],
             'Savage_Tiger': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)],
             'Turtle_Snake': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Right_Tiger': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['LEFT_SIDE']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Violent_Bear': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=1)]
             ),
             'Violent_Dragon': lambda p, b: (
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=2)]
             ),
             'Vertical_Bear': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Vice_General': lambda p, b: (
                 [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['VICE_GENERAL'], b, self.direction,  max_steps=1)]
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['VICE_GENERAL'], b, self.direction, max_steps=1)]
             ),
             'Vertical_Horse': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Vermilion_Sparrow': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Vertical_Leopard': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Vertical_Mover': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Violent_Ox': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)]
             ),
             'Vertical_Pup': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Vertical_Soldier': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Violent_Stag': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)],
             'Vertical_Tiger': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
             'Vertical_Wolf': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
             ),
             'Whale': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)],
             'Water_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction,  max_steps=4)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=4)]
             ),
             'Water_Buffalo': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
             'Wood_Chariot': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Wind_Dragon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'] + MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
-            'White_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction,  max_steps=2)],
+            'White_Elephant': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)],
             'Side_Wolf': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Water_General': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=3)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)]
             ),
             'White_Horse': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)],
             'Woodland_Demon': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
             ),
             'Wind_General': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'Wooden_Dove': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction,  max_steps=2)] +
-                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['WOODEN_DOVE'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['WOODEN_DOVE'], b, self.direction, max_steps=1)]
             ),
-            'Wrestler': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction,  max_steps=3)],
+            'Wrestler': lambda p, b: [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=3)],
             'Western_Barbarian': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=1)]
             ),
             'White_Tiger': lambda p, b: (
                 [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=2)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
             ),
             'Yaksha': lambda p, b: (
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction,  max_steps=3)] +
-                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction,  max_steps=1)]
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Right_Army': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['RIGHT_SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['LEFT_SIDE']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Left_Army': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['RIGHT_SIDE']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Free_Fire': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction, max_steps=5)]
+            ),
+            'Great_Whale': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Divine_Tiger': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Divine_Turtle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Elephant_King': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORHTOGONAL'], b, self.direction, max_steps=2)]
+            ),
+            'Captive_Bird': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Thunder_Runner': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGOANL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_SIDE'], b, self.direction, max_steps=4)]
+            ),
+            'Free_Leopard': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Free_Serpent': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Free_Tiger': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)]
+            ),
+            'Free_Bear': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Heavenly_Tetrarch': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=4)]
+            ),
+            'Playful_Cockatoo': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=5)]
+            ),
+            'Running_Dragon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGOANL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=5)]
+            ),
+            'Free_Stag': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)]
+            ),
+            'Free_Wolf': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)]
+            ),
+            'Rain_Demon': lambda p, b: (
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
+            ),
+            'Flying_Crocodile': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)]
+            ),
+            'Beast_Bird': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)]
+            ),
+            'Free_Dragon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)]
+            ),
+            'Free_Dog': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)]
+            ),
+            'Goose_Wing': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)]
+            ),
+            'Free_Pig': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Free_Chicken': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
+            ),
+            'Free_Horse': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Free_Ox': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Free_Boar': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Furious_Fiend': lambda p, b: (
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=3)]
+            ),
+            'Free_Bird': lambda p, b: (
+                [(move, ('limited_jumping', 3)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=3)]
+            ),
+            'Right_Phoenix': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=5)]
+            ),
+            'Walking_Heron': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Strong_Eagle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)]
+            ),
+            'Copper_Elephant': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Burning_Chariot': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Tiger_Soldier': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Ancient_Dragon': lambda p, b: (
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)]
+            ),
+            'Buddhist_Spirit': lambda p, b: (
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=2)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KNIGHT'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)]
+            ),
+            'Teaching_King': lambda p, b: (
+                [(move, ('limited_jumping', 3)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)]
+            ),
+            'Wind_Snapping_Turtle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=2)]
+            ),
+            'Great_Horse': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
+            ),
+            'Left_Dog': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Right_Dog': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Great_Dream_Eater': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DREAM_EATER'], b, self.direction, max_steps=1)]
+            ),
+            'Flying_Falcon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Treasure_Turtle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['VICE_GENERAL'], b, self.direction, max_steps=1)]
+            ),
+            'Spirit_Turtle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SPIRIT_TURTLE'], b, self.direction, max_steps=1)]
+            ),
+            'Running_Tile': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)]
+            ),
+            'Great_Bear': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Venomous_Wolf': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)]
+            ),
+            'Heavenly_Horse': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HEAVENLY_HORSE'], b, self.direction, max_steps=1)]
+            ),
+            'Raiding_Falcon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Mountain_Witch': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Wizard_Stork': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)]
+            ),
+            'Rushing_Boar': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Bears_Eyes': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=1)]
+            ),
+            'Mountain_Crane': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LION_DOG'], b, self.direction, max_steps=1)]
+            ),
+            'Young_Bird': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Divine_Sparrow': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_LEFT_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Divine_Dragon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD']+MOVEMENT_PATTERNS['RIGHT_SIDE']+MOVEMENT_PATTERNS['FORWARD_RIGHT_DIAGOANL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['LEFT_SIDE'], b, self.direction, max_steps=2)]
+            ),
+            'Cavalier': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL']+MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)]
+            ),
+            'Gliding_Sparrow': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction)]
+            ),
+            'Flying_Stag': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Plooding_Ox': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Bird_of_Paradise': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)]
+            ),
+            'Strong_Chariot': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)]
+            ),
+            'Coiled_Dragon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)]
+            ),
+            'Heavenly_Tetrarch_King': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HEAVENLY_TETRARCH'], b, self.direction, max_steps=1)]
+            ),
+            'Violent_Wind': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Chinese_River': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Peaceful_Mountain': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction, max_steps=5)]
+            ),
+            'Running_Ox': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction, max_steps=2)]
+            ),
+            'Running_Boar': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Running_Leopard': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['SIDE'], b, self.direction)]
+            ),
+            'Strong_Bear': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE']+MOVEMENT_PATTERNS['DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Right_Iron_Chariot': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_LEFT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Left_Iron_Chariot': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD_RIGHT_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL'], b, self.direction, max_steps=1)]
+            ),
+            'Fire_Ox': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD_AND_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=1)]
+            ),
+            'Longbow_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=5)]
+            ),
+            'Leopard_King': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction, max_steps=5)]
+            ),
+            'Burning_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Sword_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Great_Falcon': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['GREAT_FALCON'], b, self.direction, max_steps=1)]
+            ),
+            'Great_Eagle': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['KING'], b, self.direction)] +
+                [(move, True) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['HEAVENLY_TETRARCH'], b, self.direction, max_steps=1)]
+            ),
+            'Spear_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Great_Leopard': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=2)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=1)]
+            ),
+            'Great_Tiger': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction, max_steps=1)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_SIDE'], b, self.direction)]
+            ),
+            'Crossbow_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=5)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['SIDE'], b, self.direction, max_steps=3)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['BACKWARD'], b, self.direction, max_steps=2)]
+            ),
+            'Great_Elephant': lambda p, b: (
+                [(move, ('limited_jumping', 3)) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['ORTHOGONAL']+MOVEMENT_PATTERNS['BACKWARD_DIAGONAL'], b, self.direction)] +
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_DIAGONAL'], b, self.direction, max_steps=3)]
+            ),
+            'Multi_General': lambda p, b: (
+                [(move, False) for move in MovementPattern.get_moves(p, MOVEMENT_PATTERNS['FORWARD_AND_DIAGONAL']+MOVEMENT_PATTERNS['BACKWARD'], b, self.direction)]
             ),
         }
         
@@ -1206,7 +1659,7 @@ AVAILABLE_PIECES = {
     'White_Left_Mountain_Eagle': (PieceType.LEFT_MOUNTAIN_EAGLE, PieceColor.WHITE, PieceRank.OTHER),
     'White_Right_Mountain_Eagle': (PieceType.RIGHT_MOUNTAIN_EAGLE, PieceColor.WHITE, PieceRank.OTHER),
     'White_Mountain_Stag':  (PieceType.MOUNTAIN_STAG, PieceColor.WHITE, PieceRank.OTHER),
-    'White_Centaur_Master': (PieceType.CENTAUR_MASTER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Center_Master': (PieceType.CENTER_MASTER, PieceColor.WHITE, PieceRank.OTHER),
     'White_Northern_Barbarian': (PieceType.NORTHERN_BARBARIAN, PieceColor.WHITE, PieceRank.OTHER),
     'White_Neighboring_King': (PieceType.NEIGHBORING_KING, PieceColor.WHITE, PieceRank.OTHER),
     'White_Violent_Wolf': (PieceType.VIOLENT_WOLF, PieceColor.WHITE, PieceRank.OTHER),
@@ -1300,7 +1753,98 @@ AVAILABLE_PIECES = {
     'White_Western_Barbarian': (PieceType.WESTERN_BARBARIAN, PieceColor.WHITE, PieceRank.OTHER),
     'White_White_Tiger': (PieceType.WHITE_TIGER, PieceColor.WHITE, PieceRank.OTHER),
     'White_Yaksha': (PieceType.YAKSHA, PieceColor.WHITE, PieceRank.OTHER),
-    
+    'White_Right_Army': (PieceType.RIGHT_ARMY, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Left_Army': (PieceType.LEFT_ARMY, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Fire': (PieceType.FREE_FIRE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Whale': (PieceType.GREAT_WHALE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Divine_Tiger': (PieceType.DIVINE_TIGER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Divine_Turtle': (PieceType.DIVINE_TURTLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Elephant_King': (PieceType.ELEPHANT_KING, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Captive_Bird': (PieceType.CAPTIVE_BIRD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Thunder_Runner': (PieceType.THUNDER_RUNNER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Leopard': (PieceType.FREE_LEOPARD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Serpent': (PieceType.FREE_SERPENT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Tiger': (PieceType.FREE_TIGER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Bear': (PieceType.FREE_BEAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Heavenly_Tetrarch': (PieceType.HEAVENLY_TETRARCH, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Playful_Cockatoo': (PieceType.PLAYFUL_COCKATOO, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Running_Dragon': (PieceType.RUNNING_DRAGON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Stag': (PieceType.FREE_STAG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Wolf': (PieceType.FREE_WOLF, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Rain_Demon': (PieceType.RAIN_DEMON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Flying_Crocodile': (PieceType.FLYING_CROCODILE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Beast_Bird': (PieceType.BEAST_BIRD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Dragon': (PieceType.FREE_DRAGON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Dog': (PieceType.FREE_DOG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Goose_Wing': (PieceType.GOOSE_WING, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Pig': (PieceType.FREE_PIG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Chicken': (PieceType.FREE_CHICKEN, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Horse': (PieceType.FREE_HORSE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Ox': (PieceType.FREE_OX, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Boar': (PieceType.FREE_BOAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Furious_Fiend': (PieceType.FURIOUS_FIEND, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Free_Bird': (PieceType.FREE_BIRD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Right_Phoenix': (PieceType.RIGHT_PHOENIX, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Walking_Heron': (PieceType.WALKING_HERON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Strong_Eagle': (PieceType.STRONG_EAGLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Copper_Elephant': (PieceType.COPPER_ELEPHANT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Burning_Chariot': (PieceType.BURNING_CHARIOT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Tiger_Soldier': (PieceType.TIGER_SOLDIER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Ancient_Dragon': (PieceType.ANCIENT_DRAGON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Buddhist_Spirit': (PieceType.BUDDHIST_SPIRIT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Teaching_King': (PieceType.TEACHING_KING, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Wind_Snapping_Turtle': (PieceType.WIND_SNAPPING_TURTLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Horse': (PieceType.GREAT_HORSE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Left_Dog': (PieceType.LEFT_DOG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Right_Dog': (PieceType.RIGHT_DOG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Dream_Eater': (PieceType.GREAT_DREAM_EATER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Flying_Falcon': (PieceType.FLYING_FALCON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Treasure_Turtle': (PieceType.TREASURE_TURTLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Spirit_Turtle': (PieceType.SPIRIT_TURTLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Running_Tile': (PieceType.RUNNING_TILE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Bear': (PieceType.GREAT_BEAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Venomous_Wolf': (PieceType.VENOMOUS_WOLF, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Heavenly_Horse': (PieceType.HEAVENLY_HORSE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Raiding_Falcon': (PieceType.RAIDING_FALCON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Mountain_Witch': (PieceType.MOUNTAIN_WITCH, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Wizard_Stork': (PieceType.WIZARD_STORK, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Rushing_Boar': (PieceType.RUSHING_BOAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Bears_Eyes': (PieceType.BEARS_EYES, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Mountain_Crane': (PieceType.MOUNTIAN_CRANE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Young_Bird': (PieceType.YOUNG_BIRD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Divine_Sparrow': (PieceType.DIVINE_SPARROW, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Divine_Dragon': (PieceType.DIVINE_DRAGON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Cavalier': (PieceType.CAVALIER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Gliding_Sparrow': (PieceType.GLIDING_SPARROW, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Flying_Stag': (PieceType.FLYING_STAG, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Plooding_Ox': (PieceType.PLODDING_OX, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Bird_of_Paradise': (PieceType.BIRD_OF_PARADISE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Strong_Chariot': (PieceType.STRONG_CHARIOT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Coiled_Dragon': (PieceType.COILED_DRAGON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Heavenly_Tetrarch_King': (PieceType.HEAVENLY_TETRARCH_KING, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Violent_Wind': (PieceType.VIOLENT_WIND, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Chinese_River': (PieceType.CHINESE_RIVER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Peaceful_Mountain': (PieceType.PEACEFUL_MOUNTAIN, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Running_Ox': (PieceType.RUNNING_OX, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Running_Boar': (PieceType.RUNNING_BOAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Running_Leopard': (PieceType.RUNNING_LEOPARD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Strong_Bear': (PieceType.STRONG_BEAR, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Right_Iron_Chariot': (PieceType.RIGHT_IRON_CHARIOT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Left_Iron_Chariot': (PieceType.LEFT_IRON_CHARIOT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Fire_Ox': (PieceType.FIRE_OX, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Longbow_General': (PieceType.LONGBOW_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Leopard_King': (PieceType.LEOPARD_KING, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Burning_General': (PieceType.BURNING_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Sword_General': (PieceType.SWORD_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Falcon': (PieceType.GREAT_FALCON, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Eagle': (PieceType.GREAT_EAGLE, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Spear_General': (PieceType.SPEAR_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Leopard': (PieceType.GREAT_LEOPARD, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Tiger': (PieceType.GREAT_TIGER, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Crossbow_General': (PieceType.CROSSBOW_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Great_Elephant': (PieceType.GREAT_ELEPHANT, PieceColor.WHITE, PieceRank.OTHER),
+    'White_Multi_General': (PieceType.MULTI_GENERAL, PieceColor.WHITE, PieceRank.OTHER),
+
     'Black_Pawn':           (PieceType.PAWN, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Knight':         (PieceType.KNIGHT, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Bishop':         (PieceType.BISHOP, PieceColor.BLACK, PieceRank.OTHER),
@@ -1420,7 +1964,7 @@ AVAILABLE_PIECES = {
     'Black_Left_Mountain_Eagle': (PieceType.LEFT_MOUNTAIN_EAGLE, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Right_Mountain_Eagle': (PieceType.RIGHT_MOUNTAIN_EAGLE, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Mountain_Stag':  (PieceType.MOUNTAIN_STAG, PieceColor.BLACK, PieceRank.OTHER),
-    'Black_Centaur_Master': (PieceType.CENTAUR_MASTER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Center_Master': (PieceType.CENTER_MASTER, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Northern_Barbarian': (PieceType.NORTHERN_BARBARIAN, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Neighboring_King': (PieceType.NEIGHBORING_KING, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Violent_Wolf': (PieceType.VIOLENT_WOLF, PieceColor.BLACK, PieceRank.OTHER),
@@ -1514,9 +2058,100 @@ AVAILABLE_PIECES = {
     'Black_Western_Barbarian': (PieceType.WESTERN_BARBARIAN, PieceColor.BLACK, PieceRank.OTHER),
     'Black_White_Tiger': (PieceType.WHITE_TIGER, PieceColor.BLACK, PieceRank.OTHER),
     'Black_Yaksha': (PieceType.YAKSHA, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Right_Army': (PieceType.RIGHT_ARMY, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Left_Army': (PieceType.LEFT_ARMY, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Fire': (PieceType.FREE_FIRE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Whale': (PieceType.GREAT_WHALE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Divine_Tiger': (PieceType.DIVINE_TIGER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Divine_Turtle': (PieceType.DIVINE_TURTLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Elephant_King': (PieceType.ELEPHANT_KING, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Captive_Bird': (PieceType.CAPTIVE_BIRD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Thunder_Runner': (PieceType.THUNDER_RUNNER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Leopard': (PieceType.FREE_LEOPARD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Serpent': (PieceType.FREE_SERPENT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Tiger': (PieceType.FREE_TIGER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Bear': (PieceType.FREE_BEAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Heavenly_Tetrarch': (PieceType.HEAVENLY_TETRARCH, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Playful_Cockatoo': (PieceType.PLAYFUL_COCKATOO, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Running_Dragon': (PieceType.RUNNING_DRAGON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Stag': (PieceType.FREE_STAG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Wolf': (PieceType.FREE_WOLF, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Rain_Demon': (PieceType.RAIN_DEMON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Flying_Crocodile': (PieceType.FLYING_CROCODILE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Beast_Bird': (PieceType.BEAST_BIRD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Dragon': (PieceType.FREE_DRAGON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Dog': (PieceType.FREE_DOG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Goose_Wing': (PieceType.GOOSE_WING, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Pig': (PieceType.FREE_PIG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Chicken': (PieceType.FREE_CHICKEN, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Horse': (PieceType.FREE_HORSE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Ox': (PieceType.FREE_OX, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Boar': (PieceType.FREE_BOAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Furious_Fiend': (PieceType.FURIOUS_FIEND, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Free_Bird': (PieceType.FREE_BIRD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Right_Phoenix': (PieceType.RIGHT_PHOENIX, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Walking_Heron': (PieceType.WALKING_HERON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Strong_Eagle': (PieceType.STRONG_EAGLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Copper_Elephant': (PieceType.COPPER_ELEPHANT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Burning_Chariot': (PieceType.BURNING_CHARIOT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Tiger_Soldier': (PieceType.TIGER_SOLDIER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Ancient_Dragon': (PieceType.ANCIENT_DRAGON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Buddhist_Spirit': (PieceType.BUDDHIST_SPIRIT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Teaching_King': (PieceType.TEACHING_KING, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Wind_Snapping_Turtle': (PieceType.WIND_SNAPPING_TURTLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Horse': (PieceType.GREAT_HORSE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Left_Dog': (PieceType.LEFT_DOG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Right_Dog': (PieceType.RIGHT_DOG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Dream_Eater': (PieceType.GREAT_DREAM_EATER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Flying_Falcon': (PieceType.FLYING_FALCON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Treasure_Turtle': (PieceType.TREASURE_TURTLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Spirit_Turtle': (PieceType.SPIRIT_TURTLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Running_Tile': (PieceType.RUNNING_TILE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Bear': (PieceType.GREAT_BEAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Venomous_Wolf': (PieceType.VENOMOUS_WOLF, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Heavenly_Horse': (PieceType.HEAVENLY_HORSE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Raiding_Falcon': (PieceType.RAIDING_FALCON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Mountain_Witch': (PieceType.MOUNTAIN_WITCH, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Wizard_Stork': (PieceType.WIZARD_STORK, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Rushing_Boar': (PieceType.RUSHING_BOAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Bears_Eyes': (PieceType.BEARS_EYES, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Mountain_Crane': (PieceType.MOUNTIAN_CRANE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Young_Bird': (PieceType.YOUNG_BIRD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Divine_Sparrow': (PieceType.DIVINE_SPARROW, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Divine_Dragon': (PieceType.DIVINE_DRAGON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Cavalier': (PieceType.CAVALIER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Gliding_Sparrow': (PieceType.GLIDING_SPARROW, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Flying_Stag': (PieceType.FLYING_STAG, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Plooding_Ox': (PieceType.PLODDING_OX, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Bird_of_Paradise': (PieceType.BIRD_OF_PARADISE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Strong_Chariot': (PieceType.STRONG_CHARIOT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Coiled_Dragon': (PieceType.COILED_DRAGON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Heavenly_Tetrarch_King': (PieceType.HEAVENLY_TETRARCH_KING, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Violent_Wind': (PieceType.VIOLENT_WIND, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Chinese_River': (PieceType.CHINESE_RIVER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Peaceful_Mountain': (PieceType.PEACEFUL_MOUNTAIN, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Running_Ox': (PieceType.RUNNING_OX, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Running_Boar': (PieceType.RUNNING_BOAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Running_Leopard': (PieceType.RUNNING_LEOPARD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Strong_Bear': (PieceType.STRONG_BEAR, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Right_Iron_Chariot': (PieceType.RIGHT_IRON_CHARIOT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Left_Iron_Chariot': (PieceType.LEFT_IRON_CHARIOT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Fire_Ox': (PieceType.FIRE_OX, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Longbow_General': (PieceType.LONGBOW_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Leopard_King': (PieceType.LEOPARD_KING, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Burning_General': (PieceType.BURNING_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Sword_General': (PieceType.SWORD_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Falcon': (PieceType.GREAT_FALCON, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Eagle': (PieceType.GREAT_EAGLE, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Spear_General': (PieceType.SPEAR_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Leopard': (PieceType.GREAT_LEOPARD, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Tiger': (PieceType.GREAT_TIGER, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Crossbow_General': (PieceType.CROSSBOW_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Great_Elephant': (PieceType.GREAT_ELEPHANT, PieceColor.BLACK, PieceRank.OTHER),
+    'Black_Multi_General': (PieceType.MULTI_GENERAL, PieceColor.BLACK, PieceRank.OTHER),
 }
 
 ROYAL_PIECES = ['Rook_General', 'Bishop_General', 'Violent_Dragon', 'Flying_Crocodile', 'Vice_General', 'Great_General']
 HOOK_MOVERS = ['Hook_Mover', 'Capricorn', 'Long_Nosed_Goblin', 'Peacock']
 JUMP_MOVERS = ['Roc_Master']
-LIMITED_JUMPING_MOVERS = ['Golden_Bird']
+LIMITED_JUMPING_MOVERS = ['Golden_Bird', 'Free_Bird']

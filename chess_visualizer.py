@@ -1,6 +1,7 @@
 import pygame
 import os
 from pieces import create_piece, AVAILABLE_PIECES, ROYAL_PIECES, HOOK_MOVERS, JUMP_MOVERS, LIMITED_JUMPING_MOVERS
+from special_piece_moves import jump_moves_filter, royal_moves_filter, hook_moves_filter, limited_jumping_moves_filter
 from presets import get_preset
 from menus import SettingsBar, PiecePanel, PresetMenu, WINDOW_SIZE, PANEL_WIDTH, SETTINGS_BAR_HEIGHT, save_board_state, load_board_state
 
@@ -137,30 +138,6 @@ class ChessVisualizer:
             current_col += col_dir
         return True
 
-    def _is_path_clear_for_royal_piece(self, start, end, piece_rank):
-        """Check if the path between two squares is clear for Royal pieces, allowing jumps over pieces ranked below."""
-        start_row, start_col = start
-        end_row, end_col = end
-
-        # Determine direction of movement
-        row_dir = 0 if start_row == end_row else (1 if end_row > start_row else -1)
-        col_dir = 0 if start_col == end_col else (1 if end_col > start_col else -1)
-
-        # Check each square along the path
-        current_row, current_col = start_row + row_dir, start_col + col_dir
-        while (current_row, current_col) != (end_row, end_col):
-            if (current_row, current_col) in self.board:
-                # Get the rank of the piece in the way
-                blocking_piece = self.board[(current_row, current_col)]
-                blocking_piece_key, blocking_rank = blocking_piece
-                
-                # Rook_General can jump over pieces of rank 8 or below
-                if blocking_rank >= piece_rank:
-                    return False  # Cannot jump over this piece
-            current_row += row_dir
-            current_col += col_dir
-        return True
-
     def get_legal_moves(self, square):
         board_result = self.board.get(square)
         if not board_result:
@@ -177,54 +154,20 @@ class ChessVisualizer:
         moves_with_info = piece.get_legal_moves_with_info(square, self.board_size)
 
         # Filter moves based on piece blocking and capture opportunities
-        ORIGIN_DIRECTION = {}
         filtered_moves = []
         if piece_type in JUMP_MOVERS:
-            for move, can_jump in moves_with_info:
-                if isinstance(can_jump, tuple) and can_jump[0] == 'origin':
-                    target_board_result = self.board.get(move)
-                    if target_board_result:
-                        target_piece_key, _ = target_board_result
-                        target_color = target_piece_key.split('_')[0]
-                    if target_board_result is None:
-                        ORIGIN_DIRECTION[can_jump[1]] = move
-                        filtered_moves.append((move, HIGHLIGHT_COLOR))
-                    elif target_color != color:
-                        filtered_moves.append((move, CAPTURE_COLOR))
-            for move, can_jump in moves_with_info:
-                if isinstance(can_jump, tuple) and can_jump[0] == 'direction':
-                    end_row, end_col = move
-                    if can_jump[1] in ORIGIN_DIRECTION.keys():
-                        move = (ORIGIN_DIRECTION[can_jump[1]][0] + end_row - start_row, ORIGIN_DIRECTION[can_jump[1]][1] + end_col - start_col)
-                        target_board_result = self.board.get(move)
-                        if target_board_result:
-                            target_piece_key, _ = target_board_result
-                            target_color = target_piece_key.split('_')[0]
-                        else:
-                            target_color = None
-                        if target_board_result is None:
-                            filtered_moves.append((move, HIGHLIGHT_COLOR))
-                        elif target_color != color:
-                            filtered_moves.append((move, CAPTURE_COLOR))
-                            ORIGIN_DIRECTION.pop(can_jump[1], None)
-                else:
-                    target_board_result = self.board.get(move)
-                    if target_board_result:
-                        target_piece_key, _ = target_board_result
-                        target_color = target_piece_key.split('_')[0]
-                    else:
-                        target_color = None
-                    if target_board_result is None:
-                        # Empty square, check if path is clear or if piece can jump
-                        if can_jump == True or self._is_path_clear(square, move):
-                            filtered_moves.append((move, HIGHLIGHT_COLOR))
-
-                    elif target_color != color:  # Different color piece
-                        if can_jump == True or self._is_path_clear(square, move):
-                            filtered_moves.append((move, CAPTURE_COLOR))
-
+            filtered_jumping_moves = jump_moves_filter(self.board, square, color, moves_with_info)
+            filtered_moves.extend(filtered_jumping_moves)
+        elif piece_type in ROYAL_PIECES:
+            filtered_royal_moves = royal_moves_filter(self.board, square, color, rank, moves_with_info)
+            filtered_moves.extend(filtered_royal_moves)
+        elif piece_type in HOOK_MOVERS:
+            filtered_hook_moves = hook_moves_filter(self.board, self.board_size, square, color, moves_with_info)
+            filtered_moves.extend(filtered_hook_moves)
+        elif piece_type in LIMITED_JUMPING_MOVERS:
+            filtered_limited_jumping_moves = limited_jumping_moves_filter(self.board, square, color, moves_with_info)
+            filtered_moves.extend(filtered_limited_jumping_moves)
         else: # Non-jump movers
-            pieces_jumped_per_direction = [0, 0, 0, 0, 0, 0, 0, 0]
             for move, can_jump in moves_with_info:
                 target_board_result = self.board.get(move)
                 if target_board_result:
@@ -257,31 +200,6 @@ class ChessVisualizer:
                                     filtered_moves.append((move, HIGHLIGHT_COLOR))
                             else:
                                 filtered_moves.append((move, HIGHLIGHT_COLOR))
-                elif piece_type in ROYAL_PIECES:
-                    if self._is_path_clear_for_royal_piece(square, move, rank):
-                        if target_board_result is None:
-                            filtered_moves.append((move, HIGHLIGHT_COLOR))
-                        else:
-                            filtered_moves.append((move, CAPTURE_COLOR))
-                elif piece_type in HOOK_MOVERS:
-                    if target_board_result is None:
-                        if self._is_path_clear(square, move):
-                            filtered_moves.append((move, HIGHLIGHT_COLOR))
-                        if can_jump:
-                            self._highlight_turned_squares(square, move, color)
-                    elif target_color != color:
-                        if self._is_path_clear(square, move):
-                            filtered_moves.append((move, CAPTURE_COLOR))
-                elif piece_type in LIMITED_JUMPING_MOVERS:
-                    if isinstance(can_jump, tuple) and can_jump[0] == 'limited_jumping':
-                        pieces_jumped_per_direction = self.highlight_jumpable_squares(square, move, color, can_jump[1], pieces_jumped_per_direction)
-                    else:
-                        if target_board_result is None:
-                            if can_jump or self._is_path_clear(square, move):
-                                filtered_moves.append((move, HIGHLIGHT_COLOR))
-                        elif target_color != color:
-                            if can_jump == True or self._is_path_clear(square, move):
-                                filtered_moves.append((move, CAPTURE_COLOR))
                 else:
                     # For normal pieces, use standard move filtering
                     if target_board_result is None:
@@ -294,96 +212,6 @@ class ChessVisualizer:
                             filtered_moves.append((move, CAPTURE_COLOR))
 
         return filtered_moves
-
-    def highlight_jumpable_squares(self, square, move, color, limit, pieces_jumped_per_direction):
-        # Pieces Jumped per direction:
-        # 0: Down
-        # 1: Up
-        # 2: Left
-        # 3: Right
-        # 4: Diagonally up left
-        # 5: Diagonally up right
-        # 6: Diagonally down left
-        # 7: Diagonally down right
-        start_row, start_col = square
-        end_row, end_col = move
-        x_delta = end_col - start_col
-        y_delta = end_row - start_row
-        target_board_result = self.board.get(move)
-        if x_delta == 0 and y_delta > 0: # Moving down
-            if target_board_result is None and pieces_jumped_per_direction[0] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[0] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[0] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-
-        elif x_delta == 0 and y_delta < 0: # Moving up
-            if target_board_result is None and pieces_jumped_per_direction[1] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[1] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[1] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif x_delta < 0 and y_delta == 0: # Moving left
-            if target_board_result is None and pieces_jumped_per_direction[2] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[2] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[2] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif x_delta > 0 and y_delta == 0: # Moving right
-            if target_board_result is None and pieces_jumped_per_direction[3] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[3] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[3] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta < 0 and y_delta < 0): # Moving diagonally up left
-            if target_board_result is None and pieces_jumped_per_direction[4] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[4] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[4] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta < 0 and y_delta > 0): # Moving diagonally up right
-            if target_board_result is None and pieces_jumped_per_direction[5] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[5] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[5] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta > 0 and y_delta < 0): # Moving diagonally down left
-            if target_board_result is None and pieces_jumped_per_direction[6] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[6] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[6] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta > 0 and y_delta > 0): # Moving diagonally down right
-            if target_board_result is None and pieces_jumped_per_direction[7] <= limit:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-            elif target_board_result is not None and pieces_jumped_per_direction[7] <= limit:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                pieces_jumped_per_direction[7] += 1
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        return pieces_jumped_per_direction
 
     def resize_board(self, new_size):
         if MIN_BOARD_SIZE <= new_size <= MAX_BOARD_SIZE:
@@ -455,107 +283,6 @@ class ChessVisualizer:
     def _is_valid_position(self, pos):
         row, col = pos
         return 0 <= row < self.board_size and 0 <= col < self.board_size
-
-    def _highlight_turned_squares(self, start, end, color):
-        start_row, start_col = start
-        end_row, end_col = end
-        
-        x_delta = end_col - start_col
-        y_delta = end_row - start_row
-        
-        if x_delta == 0 and y_delta != 0: # Moving up or down
-            #Highlight the squares to the left and right of the end square
-            move = (end_row, end_col - 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0], move[1] - 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-            move = (end_row, end_col + 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0], move[1] + 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif x_delta != 0 and y_delta == 0: # Moving right or left
-            move = (end_row - 1, end_col)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] - 1, move[1])
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-            move = (end_row + 1, end_col)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] + 1, move[1])
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta < 0 and y_delta < 0) or (x_delta > 0 and y_delta > 0): # Moving diagonally
-            move = (end_row - 1, end_col + 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] - 1, move[1] + 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-            move = (end_row + 1, end_col - 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] + 1, move[1] - 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-        elif (x_delta < 0 and y_delta > 0) or (x_delta > 0 and y_delta < 0): # Moving diagonally
-            move = (end_row + 1, end_col + 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] + 1, move[1] + 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
-            move = (end_row - 1, end_col - 1)
-            target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            while self._is_valid_position(move) and target_board_result is None:
-                self.highlight_square(move, HIGHLIGHT_COLOR)
-                move = (move[0] - 1, move[1] - 1)
-                target_board_result = self.board.get(move) if self._is_valid_position(move) else None
-            if self._is_valid_position(move) and target_board_result is not None:
-                target_piece_key, _ = target_board_result
-                target_color = target_piece_key.split('_')[0]
-                if target_color != color:
-                    self.highlight_square(move, CAPTURE_COLOR)
 
     def run(self):
         running = True
